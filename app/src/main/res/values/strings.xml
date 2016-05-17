@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SmartNetworking</string>
+
+    <string name="qrlink">QRLINK</string>
 </resources>
