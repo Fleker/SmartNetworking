@@ -72,7 +72,8 @@ public class PersonQueryDbHelper extends SQLiteOpenHelper {
         values.put(PersonQueryContract.PersonQueryEntry.COLUMN_EMAIL, fte.getEmail());
         values.put(PersonQueryContract.PersonQueryEntry.COLUMN_PHOTO, fte.getPhotoBase64());
         values.put(PersonQueryContract.PersonQueryEntry.COLUMN_QRURL, fte.getAboutme());
-        values.put(PersonQueryContract.PersonQueryEntry.COLUMN_CONNECTIONS, fte.getConnections().toString());
+        if(fte.getConnections() != null)
+            values.put(PersonQueryContract.PersonQueryEntry.COLUMN_CONNECTIONS, fte.getConnections().toString());
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(
@@ -111,25 +112,35 @@ public class PersonQueryDbHelper extends SQLiteOpenHelper {
         }
         c.moveToFirst();
         while(c.getPosition() < c.getCount()) {
-            try {
-                entries.add(
-                        new SavedContact(
-                                c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_NAME)),
-                                c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_EMAIL)),
-                                c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_PHOTO)),
-                                c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_QRURL)),
-                                new JSONObject(c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_CONNECTIONS)))
-                        )
-                );
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            entries.add(
+                    new SavedContact(
+                            c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_NAME)),
+                            c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_EMAIL)),
+                            c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_PHOTO)),
+                            c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_QRURL)),
+                            parseJSON(c)
+                    )
+            );
             if(c.getPosition() < c.getCount()) {
                 c.moveToNext();
                 Log.d(TAG, "Moved to " + c.getPosition() + " / " + c.getCount());
             }
         }
         return entries;
+    }
+
+    public JSONObject parseJSON(Cursor c) {
+        String k = c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_CONNECTIONS));
+        if(k == null || k.isEmpty()) {
+            return null;
+        } else {
+            try {
+                return new JSONObject(k);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
 }
