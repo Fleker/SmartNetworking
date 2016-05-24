@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/BackGroundPaper">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="321dp"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:gravity="top|center_horizontal"
+                android:layout_weight="0.57">
+
+                <ImageView
+                    android:layout_width="52dp"
+                    android:layout_height="70dp"
+                    android:id="@+id/imageView"
+                    android:src="@mipmap/InsertLogo"
+                    android:contentDescription="@string/logoplaceholder"
+                    android:layout_weight="0.14" />
+
+                <TextView
+                    android:layout_width="253dp"
+                    android:layout_height="66dp"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Contact Info"
+                    android:id="@+id/Header"
+                    android:autoText="false"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textSize="35dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageButton"
+                android:src="@android:drawable/ic_menu_edit"
+                android:background="#ffffff"
+                android:baselineAlignBottom="false" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="79dp"
+        android:layout_height="72dp"
+        android:id="@+id/ProfilePic"
+        android:src="@mipmap/NameIcon"
+        android:contextClickable="true"
+        android:layout_gravity="center_horizontal" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:fillViewport="false"
+        android:scrollIndicators="right">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="40dp"
+                android:paddingTop="20dp"
+                android:weightSum="1"
+                android:paddingRight="40dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/nameIcon"
+                    android:src="@mipmap/NameIcon"
+                    android:paddingRight="5dp" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text="Name"
+                    android:ems="10"
+                    android:id="@+id/editName" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="40dp"
+                android:paddingTop="20dp"
+                android:weightSum="1"
+                android:paddingRight="40dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/CompIcon"
+                    android:src="@mipmap/InsertLogo"
+                    android:paddingRight="5dp" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editCompany"
+                    android:text="Company" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="40dp"
+                android:paddingTop="20dp"
+                android:weightSum="1"
+                android:paddingRight="40dp" >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/imageView2"
+                    android:src="@mipmap/TitleIcon"
+                    android:paddingRight="5dp" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editText"
+                    android:text="Title" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="40dp"
+                android:paddingTop="20dp"
+                android:weightSum="1"
+                android:paddingRight="40dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/emailIcon"
+                    android:src="@mipmap/EmailIcon"
+                    android:paddingRight="5dp" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:ems="10"
+                    android:id="@+id/editEmail"
+                    android:text="E-mail" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="40dp"
+                android:paddingTop="20dp"
+                android:weightSum="1"
+                android:paddingRight="40dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/phoneIcon"
+                    android:src="@mipmap/PhoneIcon"
+                    android:paddingRight="5dp" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:ems="10"
+                    android:id="@+id/editPhone"
+                    android:layout_weight=".52"
+                    android:text="Phone" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="40dp"
+                android:paddingTop="20dp"
+                android:weightSum="1"
+                android:paddingRight="40dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/websiteIcon"
+                    android:src="@mipmap/WebsiteIcon"
+                    android:paddingRight="5dp" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:ems="10"
+                    android:id="@+id/editWebsite"
+                    android:text="Website" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="40dp"
+                android:paddingTop="20dp"
+                android:weightSum="1"
+                android:paddingRight="40dp">
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:inputType="textMultiLine"
+                    android:ems="10"
+                    android:id="@+id/editPerState"
+                    android:text="Personal Statement"
+                    android:editable="true"
+                    android:textAlignment="center"
+                    android:maxLines="6" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
