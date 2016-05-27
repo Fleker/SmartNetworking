@@ -7,6 +7,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
+        android:visibility="gone"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -20,6 +21,7 @@
                 android:layout_width="321dp"
                 android:layout_height="wrap_content"
                 android:weightSum="1"
+                android:visibility="gone"
                 android:gravity="top|center_horizontal"
                 android:layout_weight="0.57">
 
@@ -56,13 +58,28 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="79dp"
-        android:layout_height="72dp"
-        android:id="@+id/ProfilePic"
-        android:src="@drawable/ic_account"
-        android:contextClickable="true"
-        android:layout_gravity="center_horizontal" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:id="@+id/profile_container"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="79dp"
+            android:layout_height="72dp"
+            android:id="@+id/ProfilePic"
+            android:src="@drawable/ic_account"
+            android:contextClickable="true"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_marginTop="-32dp"
+        android:layout_gravity="end"
+        android:layout_marginRight="16dp"
+        android:id="@+id/fab_edit"
+        android:tint="@android:color/white"
+        android:src="@drawable/ic_lead_pencil"
+        android:layout_height="wrap_content" />
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -70,178 +87,101 @@
         android:id="@+id/scrollView"
         android:fillViewport="false"
         android:scrollIndicators="right">
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="40dp"
-                android:paddingTop="20dp"
-                android:weightSum="1"
-                android:paddingRight="40dp">
-
+                style="@style/UserFieldContainer">
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
                     android:id="@+id/nameIcon"
                     android:src="@drawable/ic_account"
-                    android:paddingRight="5dp" />
-
+                    style="@style/UserFieldIcon" />
                 <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:text="Name"
-                    android:ems="10"
+                    android:hint="Name"
+                    style="@style/UserFieldText"
                     android:id="@+id/editName" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="40dp"
-                android:paddingTop="20dp"
-                android:weightSum="1"
-                android:paddingRight="40dp">
-
+                style="@style/UserFieldContainer">
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
                     android:id="@+id/CompIcon"
                     android:src="@drawable/insertlogo"
-                    android:paddingRight="5dp" />
-
+                    style="@style/UserFieldIcon"
+                     />
                 <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    style="@style/UserFieldText"
                     android:id="@+id/editCompany"
-                    android:text="Company" />
-
+                    android:hint="Company" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="40dp"
-                android:paddingTop="20dp"
-                android:weightSum="1"
-                android:paddingRight="40dp" >
-
+                style="@style/UserFieldContainer" >
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
                     android:id="@+id/imageView2"
                     android:src="@drawable/ic_tag"
-                    android:paddingRight="5dp" />
-
+                    style="@style/UserFieldIcon"/>
                 <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    style="@style/UserFieldText"
                     android:id="@+id/editText"
-                    android:text="Title" />
+                    android:hint="Title" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="40dp"
-                android:paddingTop="20dp"
-                android:weightSum="1"
-                android:paddingRight="40dp">
+                style="@style/UserFieldContainer">
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    style="@style/UserFieldIcon"
                     android:id="@+id/emailIcon"
-                    android:src="@drawable/ic_email"
-                    android:paddingRight="5dp" />
+                    android:src="@drawable/ic_email" />
 
                 <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:ems="10"
+                    style="@style/UserFieldText"
                     android:id="@+id/editEmail"
-                    android:text="E-mail" />
+                    android:hint="E-Mail" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="40dp"
-                android:paddingTop="20dp"
-                android:weightSum="1"
-                android:paddingRight="40dp">
-
+                style="@style/UserFieldContainer">
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
                     android:id="@+id/phoneIcon"
                     android:src="@drawable/ic_cellphone"
-                    android:paddingRight="5dp" />
-
+                    style="@style/UserFieldIcon"/>
                 <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    style="@style/UserFieldText"
                     android:inputType="phone"
-                    android:ems="10"
                     android:id="@+id/editPhone"
-                    android:layout_weight=".52"
-                    android:text="Phone" />
-
+                    android:hint="Phone" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="40dp"
-                android:paddingTop="20dp"
-                android:weightSum="1"
-                android:paddingRight="40dp">
+                style="@style/UserFieldContainer">
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
                     android:id="@+id/websiteIcon"
                     android:src="@drawable/ic_web"
-                    android:paddingRight="5dp" />
+                    style="@style/UserFieldIcon" />
 
                 <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:ems="10"
+                    style="@style/UserFieldText"
+                    android:inputType="textUri"
                     android:id="@+id/editWebsite"
-                    android:text="Website" />
+                    android:hint="Website" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="40dp"
-                android:paddingTop="20dp"
-                android:weightSum="1"
-                android:paddingRight="40dp">
-
+                style="@style/UserFieldContainer">
                 <EditText
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:inputType="textMultiLine"
                     android:ems="10"
                     android:id="@+id/editPerState"
-                    android:text="Personal Statement"
+                    android:hint="Personal Statement"
                     android:textAlignment="center"
                     android:maxLines="6" />
             </LinearLayout>

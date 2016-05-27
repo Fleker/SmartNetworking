@@ -67,20 +67,19 @@ public class PersonQueryDbHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
     public void insert(SQLiteDatabase db, SavedContact fte) {
-        ContentValues values = new ContentValues();
-        values.put(PersonQueryContract.PersonQueryEntry.COLUMN_NAME, fte.getName());
-        values.put(PersonQueryContract.PersonQueryEntry.COLUMN_EMAIL, fte.getEmail());
-        values.put(PersonQueryContract.PersonQueryEntry.COLUMN_PHOTO, fte.getPhotoBase64());
-        values.put(PersonQueryContract.PersonQueryEntry.COLUMN_QRURL, fte.getAboutme());
-        if(fte.getConnections() != null)
-            values.put(PersonQueryContract.PersonQueryEntry.COLUMN_CONNECTIONS, fte.getConnections().toString());
-
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(
                 PersonQueryContract.PersonQueryEntry.TABLE_NAME,
                 null,
-                values);
+                fte.toContentValues());
         Log.d(TAG, newRowId+" seems successful");
+    }
+    public void update(SQLiteDatabase writeable, SavedContact updatedProfile, int personIndex) {
+        writeable.update(PersonQueryContract.PersonQueryEntry.TABLE_NAME,
+                updatedProfile.toContentValues(),
+                PersonQueryContract.PersonQueryEntry._ID+"=?",
+                new String[]{personIndex+""}
+                );
     }
     public ArrayList<SavedContact> readAll(SQLiteDatabase db) {
         read = getReadableDatabase();

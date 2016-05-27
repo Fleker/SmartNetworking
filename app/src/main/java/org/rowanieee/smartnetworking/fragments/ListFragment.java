@@ -1,5 +1,6 @@
 package org.rowanieee.smartnetworking.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.rowanieee.smartnetworking.R;
+import org.rowanieee.smartnetworking.activities.UserInfoActivity;
 import org.rowanieee.smartnetworking.database.PersonQueryDbHelper;
 import org.rowanieee.smartnetworking.model.SavedContact;
 
@@ -78,5 +80,13 @@ public class ListFragment extends Fragment {
             printable += contact.getName()+" "+contact.getEmail()+"\n"+contact.getAboutme()+"\n"+contact.getConnections()+"\n\n\n";
         }
         ((TextView) v.findViewById(R.id.printlist)).setText(printable);
+        v.findViewById(R.id.printlist).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent visitUser = new Intent(getContext(), UserInfoActivity.class);
+                visitUser.putExtra(UserInfoActivity.EXTRA_PERSON_ID, 0);
+                startActivity(visitUser);
+            }
+        });
     }
 }

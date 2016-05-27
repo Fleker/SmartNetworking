@@ -1,5 +1,6 @@
 package org.rowanieee.smartnetworking.model;
 
+import android.content.ContentValues;
 import android.content.Context;
 
 import com.felkertech.settingsmanager.SettingsManager;
@@ -7,6 +8,7 @@ import com.felkertech.settingsmanager.SettingsManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.rowanieee.smartnetworking.R;
+import org.rowanieee.smartnetworking.database.PersonQueryContract;
 
 /**
  * Created by Nick on 5/15/2016.
@@ -108,5 +110,15 @@ public class SavedContact {
             e.printStackTrace();
         }
         return null;
+    }
+    public ContentValues toContentValues() {
+        ContentValues values = new ContentValues();
+        values.put(PersonQueryContract.PersonQueryEntry.COLUMN_NAME, getName());
+        values.put(PersonQueryContract.PersonQueryEntry.COLUMN_EMAIL, getEmail());
+        values.put(PersonQueryContract.PersonQueryEntry.COLUMN_PHOTO, getPhotoBase64());
+        values.put(PersonQueryContract.PersonQueryEntry.COLUMN_QRURL, getAboutme());
+        if(getConnections() != null)
+            values.put(PersonQueryContract.PersonQueryEntry.COLUMN_CONNECTIONS, getConnections().toString());
+        return values;
     }
 }
