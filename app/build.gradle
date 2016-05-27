@@ -20,7 +20,6 @@ android {
 }
 
 repositories {
-    // ...
     maven { url "https://jitpack.io" }
 }
 
@@ -42,5 +41,4 @@ dependencies {
     compile('com.github.afollestad.material-dialogs:commons:0.8.5.8@aar') {
         transitive = true
     }
-    compile 'com.google.android.gms:play-services-appindexing:9.0.0'
 }
