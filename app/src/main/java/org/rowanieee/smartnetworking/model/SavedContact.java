@@ -1,11 +1,23 @@
 package org.rowanieee.smartnetworking.model;
 
+import android.content.Context;
+
+import com.felkertech.settingsmanager.SettingsManager;
+
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.rowanieee.smartnetworking.R;
 
 /**
  * Created by Nick on 5/15/2016.
  */
 public class SavedContact {
+    public static final String KEY_NAME = "name";
+    public static final String KEY_EMAIL = "email";
+    public static final String KEY_PHOTO = "photo";
+    public static final String KEY_ABOUTME = "aboutme";
+    public static final String KEY_CONNECTIONS = "connections";
+
     private String name;
     private String email;
     private String photoBase64;
@@ -18,7 +30,12 @@ public class SavedContact {
      */
     private JSONObject connections;
 
-    public SavedContact() {
+    public SavedContact(JSONObject inputObject) throws JSONException {
+        this(inputObject.getString(KEY_NAME),
+                inputObject.getString(KEY_EMAIL),
+                inputObject.getString(KEY_PHOTO),
+                inputObject.getString(KEY_ABOUTME),
+                inputObject.getJSONObject(KEY_CONNECTIONS));
     }
 
     public SavedContact(String name, String email, String photoBase64, String aboutme, JSONObject connections) {
@@ -67,5 +84,29 @@ public class SavedContact {
 
     public void setConnections(JSONObject connections) {
         this.connections = connections;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(KEY_NAME, getName());
+            jsonObject.put(KEY_ABOUTME, getAboutme());
+            jsonObject.put(KEY_EMAIL, getEmail());
+            jsonObject.put(KEY_PHOTO, getPhotoBase64());
+            jsonObject.put(KEY_CONNECTIONS, getConnections());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    public static SavedContact getMyself(Context c) {
+        SettingsManager sm = new SettingsManager(c);
+        try {
+            return new SavedContact(new JSONObject(sm.getString(c.getString(R.string.sm_contactinfo))));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
