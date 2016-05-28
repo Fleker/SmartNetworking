@@ -17,6 +17,9 @@ public final class PersonQueryContract {
         public static final String COLUMN_EMAIL = "EMAIL";
         public static final String COLUMN_PHOTO = "BASE64PHOTO";
         public static final String COLUMN_QRURL = "QRURL";
+        public static final String COLUMN_COMPANY = "COMPANY";
+        public static final String COLUMN_TITLE = "TITLE";
+        public static final String COLUMN_PERSONAL_STATEMENT = "PERSONALSTATEMENT";
         public static final String COLUMN_CONNECTIONS = "CONNECTIONS";
     }
 }

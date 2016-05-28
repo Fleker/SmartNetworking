@@ -2,36 +2,41 @@
 <ScrollView android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".activities.MainActivity"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_height="wrap_content">
-
-        <!--<android.support.v7.widget.RecyclerView
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Nearby"
+            style="@style/TextViewSection"
+            android:layout_height="wrap_content" />
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/my_recycler_view"
             android:scrollbars="horizontal"
             android:layout_width="match_parent"
             android:layout_marginBottom="16dp"
-            android:layout_height="wrap_content"/>-->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Nick Felker, esq." />
+            android:layout_height="wrap_content"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:text="My Profile"
+            style="@style/TextViewSection"
+            android:layout_height="wrap_content" />
         <android.support.v7.widget.CardView
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/card_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginRight="16dp"
+            android:layout_marginBottom="64dp"
             card_view:cardCornerRadius="4dp">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,29 +50,105 @@
                     android:layout_height="200dp"
                     android:id="@+id/qrcode"
                     />
+                <RelativeLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:weightSum="10"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:text="Update QR Code"
+                        android:id="@+id/action_qr"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content" />
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:hint="Website"
+                            android:id="@+id/qrlink"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>
+                </RelativeLayout>
+                <!--Now our profile stuff-->
+                <TextView
+                    android:layout_width="match_parent"
+                    style="@style/TextViewSection"
+                    android:text="Contact Information"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_height="wrap_content" />
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="0dp"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="QR Code Link"
-                        android:id="@+id/qrlink"
+                        android:hint="Name"
+                        android:id="@+id/me_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:text="Update QR Code"
-                    android:id="@+id/action_qr"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/printlist"
-                    android:text="123"
-                    android:autoLink="all"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Company"
+                        android:id="@+id/me_company"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Title"
+                        android:id="@+id/me_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Personal Statement"
+                        android:id="@+id/me_personal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="E-Mail"
+                        android:id="@+id/me_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:id="@+id/me_networks"
+                    android:layout_height="wrap_content">
+
+                </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 

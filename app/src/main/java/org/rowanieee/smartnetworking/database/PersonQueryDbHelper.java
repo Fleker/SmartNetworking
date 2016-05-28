@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public class PersonQueryDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "network.db";
     public static final String TAG = "munch::dbHelper";
 
@@ -35,7 +35,10 @@ public class PersonQueryDbHelper extends SQLiteOpenHelper {
                     PersonQueryContract.PersonQueryEntry.COLUMN_EMAIL + TEXT_TYPE + COMMA_SEP +
                     PersonQueryContract.PersonQueryEntry.COLUMN_PHOTO + LONG_TYPE + COMMA_SEP +
                     PersonQueryContract.PersonQueryEntry.COLUMN_QRURL + TEXT_TYPE + COMMA_SEP +
-                    PersonQueryContract.PersonQueryEntry.COLUMN_CONNECTIONS + FLOAT_TYPE +
+                    PersonQueryContract.PersonQueryEntry.COLUMN_COMPANY + TEXT_TYPE + COMMA_SEP +
+                    PersonQueryContract.PersonQueryEntry.COLUMN_TITLE + TEXT_TYPE + COMMA_SEP +
+                    PersonQueryContract.PersonQueryEntry.COLUMN_PERSONAL_STATEMENT + TEXT_TYPE + COMMA_SEP +
+                    PersonQueryContract.PersonQueryEntry.COLUMN_CONNECTIONS + TEXT_TYPE +
                     " )";
 
     private static final String SQL_DELETE_ENTRIES =
@@ -80,6 +83,8 @@ public class PersonQueryDbHelper extends SQLiteOpenHelper {
                 PersonQueryContract.PersonQueryEntry._ID+"=?",
                 new String[]{personIndex+""}
                 );
+        Log.d(TAG, "Updated @ "+personIndex);
+        Log.d(TAG, updatedProfile.toJSON().toString());
     }
     public ArrayList<SavedContact> readAll(SQLiteDatabase db) {
         read = getReadableDatabase();
@@ -91,6 +96,9 @@ public class PersonQueryDbHelper extends SQLiteOpenHelper {
                 PersonQueryContract.PersonQueryEntry.COLUMN_EMAIL,
                 PersonQueryContract.PersonQueryEntry.COLUMN_QRURL,
                 PersonQueryContract.PersonQueryEntry.COLUMN_PHOTO,
+                PersonQueryContract.PersonQueryEntry.COLUMN_COMPANY,
+                PersonQueryContract.PersonQueryEntry.COLUMN_TITLE,
+                PersonQueryContract.PersonQueryEntry.COLUMN_PERSONAL_STATEMENT,
                 PersonQueryContract.PersonQueryEntry.COLUMN_CONNECTIONS
         };
 
@@ -111,14 +119,18 @@ public class PersonQueryDbHelper extends SQLiteOpenHelper {
         }
         c.moveToFirst();
         while(c.getPosition() < c.getCount()) {
+            Log.d(TAG, c.getInt(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry._ID))+"");
             entries.add(
                     new SavedContact(
                             c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_NAME)),
                             c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_EMAIL)),
                             c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_PHOTO)),
                             c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_QRURL)),
+                            c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_COMPANY)),
+                            c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_TITLE)),
+                            c.getString(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry.COLUMN_PERSONAL_STATEMENT)),
                             parseJSON(c)
-                    )
+                    ).setDatabaseId(c.getInt(c.getColumnIndexOrThrow(PersonQueryContract.PersonQueryEntry._ID)))
             );
             if(c.getPosition() < c.getCount()) {
                 c.moveToNext();

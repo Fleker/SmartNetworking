@@ -78,17 +78,21 @@
         android:layout_marginRight="16dp"
         android:id="@+id/fab_edit"
         android:tint="@android:color/white"
-        android:src="@drawable/ic_lead_pencil"
+        android:src="@drawable/ic_check"
         android:layout_height="wrap_content" />
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/scrollView"
+        android:layout_marginTop="-24dp"
         android:fillViewport="false"
         android:scrollIndicators="right">
         <LinearLayout
             android:orientation="vertical"
+            style="@style/AppTheme"
+            android:paddingTop="16dp"
+            android:id="@+id/contact_container"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
             <LinearLayout
@@ -97,11 +101,18 @@
                     android:id="@+id/nameIcon"
                     android:src="@drawable/ic_account"
                     style="@style/UserFieldIcon" />
-                <EditText
-                    android:inputType="textPersonName"
-                    android:hint="Name"
-                    style="@style/UserFieldText"
-                    android:id="@+id/editName" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:inputType="textPersonName"
+                        android:hint="Name"
+                        style="@style/UserFieldText"
+                        android:id="@+id/editName" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -111,10 +122,17 @@
                     android:src="@drawable/insertlogo"
                     style="@style/UserFieldIcon"
                      />
-                <EditText
-                    style="@style/UserFieldText"
-                    android:id="@+id/editCompany"
-                    android:hint="Company" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        style="@style/UserFieldText"
+                        android:id="@+id/editCompany"
+                        android:hint="Company" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -123,10 +141,17 @@
                     android:id="@+id/imageView2"
                     android:src="@drawable/ic_tag"
                     style="@style/UserFieldIcon"/>
-                <EditText
-                    style="@style/UserFieldText"
-                    android:id="@+id/editText"
-                    android:hint="Title" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        style="@style/UserFieldText"
+                        android:id="@+id/editTitle"
+                        android:hint="Title" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -136,26 +161,39 @@
                     style="@style/UserFieldIcon"
                     android:id="@+id/emailIcon"
                     android:src="@drawable/ic_email" />
-
-                <EditText
-                    android:inputType="textEmailAddress"
-                    style="@style/UserFieldText"
-                    android:id="@+id/editEmail"
-                    android:hint="E-Mail" />
-
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:inputType="textEmailAddress"
+                        style="@style/UserFieldText"
+                        android:id="@+id/editEmail"
+                        android:hint="E-Mail" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 style="@style/UserFieldContainer">
                 <ImageView
                     android:id="@+id/phoneIcon"
                     android:src="@drawable/ic_cellphone"
                     style="@style/UserFieldIcon"/>
-                <EditText
-                    style="@style/UserFieldText"
-                    android:inputType="phone"
-                    android:id="@+id/editPhone"
-                    android:hint="Phone" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        style="@style/UserFieldText"
+                        android:inputType="phone"
+                        android:id="@+id/editPhone"
+                        android:hint="Phone" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -165,25 +203,39 @@
                     android:id="@+id/websiteIcon"
                     android:src="@drawable/ic_web"
                     style="@style/UserFieldIcon" />
-
-                <EditText
-                    style="@style/UserFieldText"
-                    android:inputType="textUri"
-                    android:id="@+id/editWebsite"
-                    android:hint="Website" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        style="@style/UserFieldText"
+                        android:inputType="textUri"
+                        android:id="@+id/editWebsite"
+                        android:hint="Website" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginBottom="8dp"
                 style="@style/UserFieldContainer">
-                <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:inputType="textMultiLine"
-                    android:ems="10"
-                    android:id="@+id/editPerState"
-                    android:hint="Personal Statement"
-                    android:textAlignment="center"
-                    android:maxLines="6" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:inputType="textMultiLine"
+                        android:ems="10"
+                        android:id="@+id/editPerState"
+                        android:hint="Personal Statement"
+                        android:textAlignment="center"
+                        android:maxLines="6" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

@@ -1,6 +1,7 @@
 package org.rowanieee.smartnetworking.activities;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -89,7 +90,6 @@ public class MainActivity extends AppCompatActivity
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         homeFragment = new HomeFragment();
         listFragment = new ListFragment();
-        listFragment.redrawContacts();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -150,7 +150,8 @@ public class MainActivity extends AppCompatActivity
     }
     private void unsubscribe() {
         Log.i(TAG, "Unsubscribing.");
-        Nearby.Messages.unsubscribe(gapi, mMessageListener);
+        if(gapi.isConnected())
+            Nearby.Messages.unsubscribe(gapi, mMessageListener);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
