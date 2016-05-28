@@ -104,6 +104,26 @@ public class MainActivity extends AppCompatActivity
         adapter.addFragment(homeFragment, "ONE");
         adapter.addFragment(listFragment, "TWO");
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 0) {
+                    listFragment.hideFab();
+                } else {
+                    listFragment.showFab();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override

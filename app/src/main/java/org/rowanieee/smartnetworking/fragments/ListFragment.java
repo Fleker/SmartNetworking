@@ -3,6 +3,7 @@ package org.rowanieee.smartnetworking.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -53,111 +54,107 @@ public class ListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final SavedContact newContact;
-                try {
-                    newContact = new SavedContact(null);
-                    MaterialDialog contactCreator = new MaterialDialog.Builder(getContext())
-                            .title(R.string.new_contact_title)
-                            .customView(R.layout.userinfo, false)
-                            .positiveText(R.string.action_connect)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    PersonQueryDbHelper pqdh = new PersonQueryDbHelper(getContext());
-                                    pqdh.insert(pqdh.getWritableDatabase(), newContact);
-                                    redrawContacts();
-                                }
-                            })
-                            .show();
-                    View dialogView = contactCreator.getCustomView();
-                    //Do some custom adjustments on this layout
-                    dialogView.findViewById(R.id.fab_edit).setVisibility(View.GONE);
-                    NetworksUtils.initializeNetworkFieldsForUser(newContact,
-                            (LinearLayout) dialogView.findViewById(R.id.contact_container), getContext());
-                    //Load your preferences
-                    ((EditText) dialogView.findViewById(R.id.editName)).addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                newContact = new SavedContact(0);
+                MaterialDialog contactCreator = new MaterialDialog.Builder(getContext())
+                        .title(R.string.new_contact_title)
+                        .customView(R.layout.userinfo, false)
+                        .positiveText(R.string.action_connect)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                PersonQueryDbHelper pqdh = new PersonQueryDbHelper(getContext());
+                                pqdh.insert(pqdh.getWritableDatabase(), newContact);
+                                redrawContacts();
+                            }
+                        })
+                        .show();
+                View dialogView = contactCreator.getCustomView();
+                //Do some custom adjustments on this layout
+                dialogView.findViewById(R.id.fab_edit).setVisibility(View.GONE);
+                NetworksUtils.initializeNetworkFieldsForUser(newContact,
+                        (LinearLayout) dialogView.findViewById(R.id.contact_container), getContext());
+                //Load your preferences
+                ((EditText) dialogView.findViewById(R.id.editName)).addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                        }
+                    }
 
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            newContact.setName(s.toString());
-                        }
-                    });
-                    ((EditText) dialogView.findViewById(R.id.editCompany)).addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        newContact.setName(s.toString());
+                    }
+                });
+                ((EditText) dialogView.findViewById(R.id.editCompany)).addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                        }
+                    }
 
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            newContact.setCompany(s.toString());
-                        }
-                    });
-                    ((EditText) dialogView.findViewById(R.id.editTitle)).addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        newContact.setCompany(s.toString());
+                    }
+                });
+                ((EditText) dialogView.findViewById(R.id.editTitle)).addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                        }
+                    }
 
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            newContact.setTitle(s.toString());
-                        }
-                    });
-                    ((EditText) dialogView.findViewById(R.id.editPerState)).addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        newContact.setTitle(s.toString());
+                    }
+                });
+                ((EditText) dialogView.findViewById(R.id.editPerState)).addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                        }
+                    }
 
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            newContact.setPersonalStatement(s.toString());
-                        }
-                    });
-                    ((EditText) dialogView.findViewById(R.id.editEmail)).addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        newContact.setPersonalStatement(s.toString());
+                    }
+                });
+                ((EditText) dialogView.findViewById(R.id.editEmail)).addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                        }
+                    }
 
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            newContact.setEmail(s.toString());
-                        }
-                    });
-                    //TODO Profile pictures
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        newContact.setEmail(s.toString());
+                    }
+                });
+                //TODO Profile pictures
 
             }
         });
@@ -188,5 +185,12 @@ public class ListFragment extends Fragment {
                 startActivity(visitUser);
             }
         });
+    }
+
+    public void showFab() {
+        ((FloatingActionButton) v.findViewById(R.id.fab_add)).show();
+    }
+    public void hideFab() {
+        ((FloatingActionButton) v.findViewById(R.id.fab_add)).hide();
     }
 }

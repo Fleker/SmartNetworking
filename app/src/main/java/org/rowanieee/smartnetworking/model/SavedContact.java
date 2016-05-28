@@ -46,7 +46,7 @@ public class SavedContact {
         //Creates a new SavedContact from scratch
         this("Me", "info@example.com", "", "http://about.me", "N/A", "", "Hi! I'm new!", new JSONObject());
     }
-    public SavedContact(Object nullableObject) {
+    public SavedContact(int putZeroHere) {
         this("", "", "", "", "", "", "", new JSONObject());
     }
     public SavedContact(JSONObject inputObject) throws JSONException {
