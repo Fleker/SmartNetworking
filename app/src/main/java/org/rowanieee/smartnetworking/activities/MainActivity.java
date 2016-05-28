@@ -2,6 +2,8 @@ package org.rowanieee.smartnetworking.activities;
 
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -99,7 +101,7 @@ public class MainActivity extends AppCompatActivity
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_bluetooth_audio);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_account_multiple);
     }
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(final ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(homeFragment, "ONE");
         adapter.addFragment(listFragment, "TWO");
@@ -115,13 +117,23 @@ public class MainActivity extends AppCompatActivity
                 if(position == 0) {
                     listFragment.hideFab();
                 } else {
-                    listFragment.showFab();
+                    new Handler(Looper.getMainLooper()) {
+                        @Override
+                        public void handleMessage(android.os.Message msg) {
+                            super.handleMessage(msg);
+                            listFragment.showFab();
+                        }
+                    }.sendEmptyMessageDelayed(0, 250);
                 }
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                if(state == ViewPager.SCROLL_STATE_DRAGGING) {
+                    listFragment.hideFab();
+                } else if(state == ViewPager.SCROLL_STATE_IDLE && viewPager.getCurrentItem() == 1) {
+                    listFragment.showFab();
+                }
             }
         });
     }
