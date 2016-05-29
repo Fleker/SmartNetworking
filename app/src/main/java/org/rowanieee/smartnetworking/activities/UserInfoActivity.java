@@ -56,25 +56,7 @@ public class UserInfoActivity extends AppCompatActivity {
 //        getSupportActionBar().setTitle(R.string.edit_contact_title);
 
         //Image first
-        if(profile.getPhotoBase64().length() > 2) {
-            profile.setPhotoBase64(getString(R.string.base64sample));
-            byte[] decodedString = Base64.decode(profile.getPhotoBase64(), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            ((ImageView) findViewById(R.id.ProfilePic)).setImageBitmap(decodedByte);
-
-            //Palette the layout
-            Palette.from(findViewById(R.id.ProfilePic).getDrawingCache()).generate(new Palette.PaletteAsyncListener() {
-                @Override
-                public void onGenerated(Palette palette) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        getWindow().setNavigationBarColor(palette.getDarkVibrantSwatch().getRgb());
-                        getWindow().setStatusBarColor(palette.getDarkVibrantSwatch().getRgb());
-                    }
-                    findViewById(R.id.profile_container).setBackgroundColor(palette.getLightMutedSwatch().getRgb());
-                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(palette.getVibrantSwatch().getRgb()));
-                }
-            });
-        }
+        updateImage();
 
         //Now other fields
         //Load your preferences
@@ -265,13 +247,33 @@ public class UserInfoActivity extends AppCompatActivity {
         return i;
     }
 
+    public void updateImage() {
+        if(profile.getPhotoBase64().length() > 2) {
+            ((ImageView) findViewById(R.id.ProfilePic)).setImageBitmap(ImagePickerUtils.getBitmapFromBase64(profile.getPhotoBase64()));
+
+            //Palette the layout
+            Palette.from(findViewById(R.id.ProfilePic).getDrawingCache()).generate(new Palette.PaletteAsyncListener() {
+                @Override
+                public void onGenerated(Palette palette) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        getWindow().setNavigationBarColor(palette.getDarkVibrantSwatch().getRgb());
+                        getWindow().setStatusBarColor(palette.getDarkVibrantSwatch().getRgb());
+                    }
+                    findViewById(R.id.profile_container).setBackgroundColor(palette.getLightMutedSwatch().getRgb());
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(palette.getVibrantSwatch().getRgb()));
+                }
+            });
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Is this for ImagePicker?
-        ImagePickerUtils.interpretActivityResult(requestCode, resultCode, data, new ImagePickerUtils.ImagePickerListener() {
+        ImagePickerUtils.interpretActivityResult(UserInfoActivity.this, requestCode, resultCode, data, new ImagePickerUtils.ImagePickerListener() {
             @Override
             public void onImageSelected(String userPhotoBase64) {
-                //TODO Set to this contact
+                profile.setPhotoBase64(userPhotoBase64);
+                updateImage();
             }
         });
         super.onActivityResult(requestCode, resultCode, data);

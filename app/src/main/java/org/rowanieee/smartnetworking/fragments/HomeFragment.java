@@ -192,7 +192,7 @@ public class HomeFragment extends Fragment {
         NetworksUtils.initializeNetworkFieldsForUser(me, (LinearLayout) v.findViewById(R.id.me_networks), getContext());
         return v;
     }
-    public void loadQrCode() {
+    private void loadQrCode() {
         Log.d(TAG, "QR Code is `"+qrurl+"`");
         if(qrurl == null || qrurl.isEmpty())
             qrurl = "h";
@@ -201,6 +201,9 @@ public class HomeFragment extends Fragment {
         myImage.setImageBitmap(myBitmap);
         //TODO Export contacts as VCards maybe
 //        VCard virginityCard = new VCard(me.getName());
-
+    }
+    public void updateImage(String profilePhoto) {
+        me.setPhotoBase64(profilePhoto);
+        //TODO Some UI updates
     }
 }

@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -207,16 +208,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Toast.makeText(MainActivity.this, "Cannot connect", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Is this for ImagePicker?
-        ImagePickerUtils.interpretActivityResult(requestCode, resultCode, data, new ImagePickerUtils.ImagePickerListener() {
+        ImagePickerUtils.interpretActivityResult(MainActivity.this, requestCode, resultCode, data, new ImagePickerUtils.ImagePickerListener() {
             @Override
             public void onImageSelected(String userPhotoBase64) {
-                //TODO Set to user's
+                //Set to user's profile
+                homeFragment.updateImage(userPhotoBase64);
             }
         });
         super.onActivityResult(requestCode, resultCode, data);

@@ -1,16 +1,25 @@
 package org.rowanieee.smartnetworking.fragments;
 
 import android.Manifest;
+import android.content.ContentProviderOperation;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.OperationApplicationException;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +41,9 @@ import org.rowanieee.smartnetworking.database.PersonQueryDbHelper;
 import org.rowanieee.smartnetworking.model.SavedContact;
 import org.rowanieee.smartnetworking.utils.NetworksUtils;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Will show a list of everyone you've connected with in the past
@@ -40,6 +51,7 @@ import java.util.ArrayList;
  */
 public class ListFragment extends Fragment {
     public static final int PERMISSION_WRITE_CONTACTS = 308;
+    private static final String TAG = "ListFragment";
 
     private View v;
 
@@ -218,6 +230,70 @@ public class ListFragment extends Fragment {
 
     public void resyncContacts() {
         //TODO Actually write to contacts DB
+        //Run in a separate thread so that we don't query forever on UI thread
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<SavedContact> savedContacts =
+                        new PersonQueryDbHelper(getContext()).readAll(new PersonQueryDbHelper(getContext()).getReadableDatabase());
+
+                //We do have permission
+                ContentResolver cr = getActivity().getContentResolver();
+                Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                        null, null, null, null);
+                if (cur.getCount() > 0) {
+                    while (cur.moveToNext()) {
+                        String id = cur.getString(
+                                cur.getColumnIndex(ContactsContract.Contacts._ID));
+                        String name = cur.getString(
+                                cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        //Query note
+                        String noteWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
+                        String[] noteWhereParams = new String[]{id,
+                                ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE};
+                        Cursor noteCur = cr.query(ContactsContract.Data.CONTENT_URI, null, noteWhere, noteWhereParams, null);
+                        if (noteCur.moveToFirst()) {
+                            String note = noteCur.getString(noteCur.getColumnIndex(ContactsContract.CommonDataKinds.Note.NOTE));
+                            if(note.contains("SmartNetwork")) {
+                                //One of ours
+                                for(SavedContact sc: savedContacts) {
+                                    if(sc.getName().equals(name)) {
+                                        //Already exists
+                                        savedContacts.remove(sc);
+                                        //TODO Update contact
+                                    }
+                                }
+                            }
+                        }
+                        noteCur.close();
+                    }
+                }
+
+                //Now we only have new contacts left
+                ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<>();
+                for(SavedContact sc: savedContacts) {
+//                    sc.getDatabaseId()
+//                    sc.getAboutme()
+//                    sc.getPersonalStatement()
+//                    sc.getEmail()
+//                    sc.getCompany()
+//                    sc.getTitle()
+//                    sc.getConnections()
+                    //TODO Insert
+                    contentProviderOperations.add(
+                            ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
+                                .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, sc.getName())
+//                                .withValue(ContactsContract.CommonDataKinds, null)
+                                .build());
+                    try {
+                        getContext().getContentResolver().
+                                applyBatch(ContactsContract.AUTHORITY, contentProviderOperations);
+                    } catch (RemoteException | OperationApplicationException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
 
     public void showFab() {
