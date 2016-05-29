@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import org.rowanieee.smartnetworking.R;
 import org.rowanieee.smartnetworking.database.PersonQueryDbHelper;
 import org.rowanieee.smartnetworking.model.SavedContact;
+import org.rowanieee.smartnetworking.utils.ImagePickerUtils;
 import org.rowanieee.smartnetworking.utils.NetworksUtils;
 
 import java.util.ArrayList;
@@ -262,6 +263,18 @@ public class UserInfoActivity extends AppCompatActivity {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         return i;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //Is this for ImagePicker?
+        ImagePickerUtils.interpretActivityResult(requestCode, resultCode, data, new ImagePickerUtils.ImagePickerListener() {
+            @Override
+            public void onImageSelected(String userPhotoBase64) {
+                //TODO Set to this contact
+            }
+        });
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 }

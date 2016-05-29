@@ -1,5 +1,6 @@
 package org.rowanieee.smartnetworking.activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Handler;
@@ -41,6 +42,7 @@ import org.rowanieee.smartnetworking.database.PersonQueryDbHelper;
 import org.rowanieee.smartnetworking.fragments.HomeFragment;
 import org.rowanieee.smartnetworking.fragments.ListFragment;
 import org.rowanieee.smartnetworking.model.SavedContact;
+import org.rowanieee.smartnetworking.utils.ImagePickerUtils;
 
 import java.util.ArrayList;
 
@@ -206,5 +208,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //Is this for ImagePicker?
+        ImagePickerUtils.interpretActivityResult(requestCode, resultCode, data, new ImagePickerUtils.ImagePickerListener() {
+            @Override
+            public void onImageSelected(String userPhotoBase64) {
+                //TODO Set to user's
+            }
+        });
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

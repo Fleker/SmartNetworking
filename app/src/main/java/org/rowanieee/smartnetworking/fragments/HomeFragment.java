@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.felkertech.settingsmanager.SettingsManager;
 
 import net.glxn.qrgen.android.QRCode;
+import net.glxn.qrgen.core.scheme.VCard;
 
 import org.json.JSONException;
 import org.rowanieee.smartnetworking.R;
@@ -198,5 +199,8 @@ public class HomeFragment extends Fragment {
         Bitmap myBitmap = QRCode.from(qrurl).bitmap();
         ImageView myImage = (ImageView) v.findViewById(R.id.qrcode);
         myImage.setImageBitmap(myBitmap);
+        //TODO Export contacts as VCards maybe
+//        VCard virginityCard = new VCard(me.getName());
+
     }
 }

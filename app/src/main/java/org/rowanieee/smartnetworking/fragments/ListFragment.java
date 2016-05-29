@@ -1,10 +1,14 @@
 package org.rowanieee.smartnetworking.fragments;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -13,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -34,6 +39,8 @@ import java.util.ArrayList;
  * Created by Nick Felker on 5/26/2016.
  */
 public class ListFragment extends Fragment {
+    public static final int PERMISSION_WRITE_CONTACTS = 308;
+
     private View v;
 
     public ListFragment() {
@@ -185,6 +192,32 @@ public class ListFragment extends Fragment {
                 startActivity(visitUser);
             }
         });
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (((AppCompatActivity) getActivity()).checkSelfPermission(Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                //Resync
+                resyncContacts();
+            } else {
+                ((AppCompatActivity) getActivity()).requestPermissions(new String[] {Manifest.permission.WRITE_CONTACTS}, PERMISSION_WRITE_CONTACTS);
+            }
+        } else {
+            //We already have permission
+            resyncContacts();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == PERMISSION_WRITE_CONTACTS && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            resyncContacts();
+        } else {
+            Toast.makeText(getContext(), "Contacts will only be available in this app", Toast.LENGTH_SHORT).show();
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public void resyncContacts() {
+        //TODO Actually write to contacts DB
     }
 
     public void showFab() {
