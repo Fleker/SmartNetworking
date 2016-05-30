@@ -245,8 +245,8 @@ public class HomeFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-        //TODO Combine this
-        vCard.setNote(me.getPersonalStatement()+"\n<SmartNetworking>\n"+me.getConnections().toString());
+        //TODO Combine this w/ list frag
+        vCard.setNote(me.getPersonalStatement()+"\nSmartNetwork\n"+me.getConnections().toString());
         //Then redo this
         myBitmap = QRCode.from(vCard).bitmap();
         myImage = (ImageView) v.findViewById(R.id.qrcode);

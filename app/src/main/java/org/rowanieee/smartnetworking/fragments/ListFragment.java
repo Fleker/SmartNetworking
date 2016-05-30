@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,8 +43,11 @@ import org.rowanieee.smartnetworking.activities.UserInfoActivity;
 import org.rowanieee.smartnetworking.constants.Networks;
 import org.rowanieee.smartnetworking.database.PersonQueryDbHelper;
 import org.rowanieee.smartnetworking.model.SavedContact;
+import org.rowanieee.smartnetworking.utils.ImagePickerUtils;
 import org.rowanieee.smartnetworking.utils.NetworksUtils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -350,6 +354,47 @@ public class ListFragment extends Fragment {
                     .build());
         }
 
+        //Picture
+        if(isAnUpdate) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            if(ImagePickerUtils.getBitmapFromBase64(sc.getPhotoBase64()) != null) {    // If an image is selected successfully
+                ImagePickerUtils.getBitmapFromBase64(sc.getPhotoBase64()).compress(Bitmap.CompressFormat.PNG , 100, stream);
+
+                // Adding insert operation to operations list
+                // to insert Photo in the table ContactsContract.Data
+                op_list.add(operation
+                        .withSelection(ContactsContract.Data.CONTACT_ID + " =? AND " + ContactsContract.Data.MIMETYPE + " =?",
+                                new String[] {id, ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE})
+                        .withValue(ContactsContract.Data.IS_SUPER_PRIMARY, 1)
+                        .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO, stream.toByteArray())
+                        .build());
+                try {
+                    stream.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            if(ImagePickerUtils.getBitmapFromBase64(sc.getPhotoBase64()) != null) {    // If an image is selected successfully
+                ImagePickerUtils.getBitmapFromBase64(sc.getPhotoBase64()).compress(Bitmap.CompressFormat.PNG , 100, stream);
+
+                // Adding insert operation to operations list
+                // to insert Photo in the table ContactsContract.Data
+                op_list.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                        .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                        .withValue(ContactsContract.Data.IS_SUPER_PRIMARY, 1)
+                        .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE)
+                        .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO, stream.toByteArray())
+                        .build());
+                try {
+                    stream.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         if(sc.getConnections().has(Networks.PHONE.getKey())) {
             if(isAnUpdate) {
                 op_list.add(operation
@@ -415,7 +460,7 @@ public class ListFragment extends Fragment {
             op_list.add(operation
                     .withSelection(ContactsContract.Data.CONTACT_ID + " =? AND " + ContactsContract.Data.MIMETYPE + " =?",
                             new String[] {id, ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE})
-                    .withValue(ContactsContract.CommonDataKinds.Note.NOTE, sc.getPersonalStatement() + "\n<SmartNetwork>\n" + sc.getConnections().toString())
+                    .withValue(ContactsContract.CommonDataKinds.Note.NOTE, sc.getPersonalStatement() + "\nSmartNetwork\n" + sc.getConnections().toString())
                     .build());
         } else {
             op_list.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
