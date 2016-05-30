@@ -64,8 +64,8 @@
         android:id="@+id/profile_container"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="79dp"
-            android:layout_height="72dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:id="@+id/ProfilePic"
             android:src="@drawable/ic_account"
             android:contextClickable="true"

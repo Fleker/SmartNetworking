@@ -25,9 +25,9 @@ public class ImagePickerUtils {
     public static final int REQUEST_CODE = 800;
 
     /** The max profile image width */
-    private static final int MAX_WIDTH = 100;
+    private static final int MAX_WIDTH = 200;
     /** The max profile image height */
-    private static final int MAX_HEIGHT = 100;
+    private static final int MAX_HEIGHT = 200;
     private static final String TAG = "ImagePickerUtils";
 
     public static void openImagePicker(Activity mActivity) {
@@ -58,8 +58,9 @@ public class ImagePickerUtils {
                             //Now get a base64 of that Bitmap
                             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                             smallerBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                            byte[] byteArray = byteArrayOutputStream .toByteArray();
+                            byte[] byteArray = byteArrayOutputStream.toByteArray();
                             String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                            Log.d(TAG, "Got a "+encoded.length()+" sized string");
                             listener.onImageSelected(encoded);
                         } catch (IOException e) {
                             e.printStackTrace();

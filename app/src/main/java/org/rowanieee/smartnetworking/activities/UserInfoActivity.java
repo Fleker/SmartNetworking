@@ -57,6 +57,12 @@ public class UserInfoActivity extends AppCompatActivity {
 
         //Image first
         updateImage();
+        findViewById(R.id.ProfilePic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePickerUtils.openImagePicker(UserInfoActivity.this);
+            }
+        });
 
         //Now other fields
         //Load your preferences
@@ -249,18 +255,25 @@ public class UserInfoActivity extends AppCompatActivity {
 
     public void updateImage() {
         if(profile.getPhotoBase64().length() > 2) {
-            ((ImageView) findViewById(R.id.ProfilePic)).setImageBitmap(ImagePickerUtils.getBitmapFromBase64(profile.getPhotoBase64()));
+            Bitmap bmp = ImagePickerUtils.getBitmapFromBase64(profile.getPhotoBase64());
+            ((ImageView) findViewById(R.id.ProfilePic)).setImageBitmap(bmp);
 
             //Palette the layout
-            Palette.from(findViewById(R.id.ProfilePic).getDrawingCache()).generate(new Palette.PaletteAsyncListener() {
+            Palette.from(bmp).generate(new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(Palette palette) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        getWindow().setNavigationBarColor(palette.getDarkVibrantSwatch().getRgb());
-                        getWindow().setStatusBarColor(palette.getDarkVibrantSwatch().getRgb());
+                        if(palette.getDarkVibrantSwatch() != null) {
+                            getWindow().setNavigationBarColor(palette.getDarkVibrantSwatch().getRgb());
+                            getWindow().setStatusBarColor(palette.getDarkVibrantSwatch().getRgb());
+                        } else if(palette.getDarkMutedSwatch() != null) {
+                            getWindow().setNavigationBarColor(palette.getDarkMutedSwatch().getRgb());
+                            getWindow().setStatusBarColor(palette.getDarkMutedSwatch().getRgb());
+                        }
                     }
                     findViewById(R.id.profile_container).setBackgroundColor(palette.getLightMutedSwatch().getRgb());
-                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(palette.getVibrantSwatch().getRgb()));
+                    ((FloatingActionButton) findViewById(R.id.fab_edit)).setBackgroundColor(palette.getVibrantSwatch().getRgb());
+                    //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(palette.getVibrantSwatch().getRgb()));
                 }
             });
         }

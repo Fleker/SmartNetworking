@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -30,6 +33,7 @@ import org.json.JSONException;
 import org.rowanieee.smartnetworking.R;
 import org.rowanieee.smartnetworking.constants.Networks;
 import org.rowanieee.smartnetworking.model.SavedContact;
+import org.rowanieee.smartnetworking.utils.ImagePickerUtils;
 import org.rowanieee.smartnetworking.utils.NetworksUtils;
 
 /**
@@ -47,6 +51,19 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    boolean handlerActive = true;
+    Handler iThinkThisHandlerIsStupid = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            loadQrCode();
+            sm.setString(R.string.sm_contactinfo, me.toJSON().toString());
+            if(handlerActive) {
+                sendEmptyMessageDelayed(0, 5000);
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +78,8 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_settings, container, false);
         ((EditText) v.findViewById(R.id.qrlink)).setText(qrurl);
+        me = SavedContact.getMyself(getContext());
+
         //Search for nearby peeps
         loadQrCode();
         ((EditText) v.findViewById(R.id.qrlink)).addTextChangedListener(new TextWatcher() {
@@ -94,8 +113,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        v.findViewById(R.id.me_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePickerUtils.openImagePicker(getActivity());
+            }
+        });
 
-        me = SavedContact.getMyself(getContext());
+
         //Load your preferences
         ((EditText) v.findViewById(R.id.me_name)).setText(me.getName());
         ((EditText) v.findViewById(R.id.me_name)).addTextChangedListener(new TextWatcher() {
@@ -112,6 +137,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 me.setName(s.toString());
+                loadQrCode();
                 sm.setString(R.string.sm_contactinfo, me.toJSON().toString());
             }
         });
@@ -130,6 +156,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 me.setCompany(s.toString());
+                loadQrCode();
                 sm.setString(R.string.sm_contactinfo, me.toJSON().toString());
             }
         });
@@ -148,6 +175,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 me.setTitle(s.toString());
+                loadQrCode();
                 sm.setString(R.string.sm_contactinfo, me.toJSON().toString());
             }
         });
@@ -184,12 +212,17 @@ public class HomeFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 me.setEmail(s.toString());
+                loadQrCode();
                 sm.setString(R.string.sm_contactinfo, me.toJSON().toString());
             }
         });
-        //TODO Profile pictures
+        if(me.getPhotoBase64().length() > 2) {
+            ((ImageView) v.findViewById(R.id.me_image)).setImageBitmap(ImagePickerUtils.getBitmapFromBase64(me.getPhotoBase64()));
+        }
 
-        NetworksUtils.initializeNetworkFieldsForUser(me, (LinearLayout) v.findViewById(R.id.me_networks), getContext());
+        LinearLayout networksLayout = (LinearLayout) v.findViewById(R.id.me_networks);
+        NetworksUtils.initializeNetworkFieldsForUser(me, networksLayout, getContext());
+        iThinkThisHandlerIsStupid.sendEmptyMessageDelayed(0, 100);
         return v;
     }
     private void loadQrCode() {
@@ -200,10 +233,42 @@ public class HomeFragment extends Fragment {
         ImageView myImage = (ImageView) v.findViewById(R.id.qrcode);
         myImage.setImageBitmap(myBitmap);
         //TODO Export contacts as VCards maybe
-//        VCard virginityCard = new VCard(me.getName());
+        VCard vCard = new VCard(me.getName())
+                .setCompany(me.getCompany())
+                .setTitle(me.getTitle())
+                .setWebsite(me.getAboutme())
+                .setEmail(me.getEmail());
+        if(me.getConnections().has(Networks.PHONE.getKey())) {
+            try {
+                vCard.setPhoneNumber(me.getConnections().getString(Networks.PHONE.getKey()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        //TODO Combine this
+        vCard.setNote(me.getPersonalStatement()+"\n<SmartNetworking>\n"+me.getConnections().toString());
+        //Then redo this
+        myBitmap = QRCode.from(vCard).bitmap();
+        myImage = (ImageView) v.findViewById(R.id.qrcode);
+        myImage.setImageBitmap(myBitmap);
     }
     public void updateImage(String profilePhoto) {
         me.setPhotoBase64(profilePhoto);
-        //TODO Some UI updates
+        ((ImageView) v.findViewById(R.id.me_image)).setImageBitmap(ImagePickerUtils.getBitmapFromBase64(profilePhoto));
+        sm.setString(R.string.sm_contactinfo, me.toJSON().toString());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        handlerActive = false;
+        iThinkThisHandlerIsStupid.sendEmptyMessage(0); //Do one last save
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        handlerActive = true;
+        iThinkThisHandlerIsStupid.sendEmptyMessageDelayed(0, 100);
     }
 }
