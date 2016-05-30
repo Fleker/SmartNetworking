@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_add"
         android:title="Add"
+        android:visible="false"
         android:icon="@drawable/ic_plus"
         app:showAsAction="always" />
 </menu>

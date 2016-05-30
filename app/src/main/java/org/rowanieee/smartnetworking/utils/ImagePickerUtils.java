@@ -28,6 +28,7 @@ public class ImagePickerUtils {
     private static final int MAX_WIDTH = 100;
     /** The max profile image height */
     private static final int MAX_HEIGHT = 100;
+    private static final String TAG = "ImagePickerUtils";
 
     public static void openImagePicker(Activity mActivity) {
         openSafWithFallback(mActivity);
@@ -42,6 +43,7 @@ public class ImagePickerUtils {
                     if (data != null) {
                         // Get the URI of the selected file
                         Uri documentUri = data.getData();
+                        Log.d(TAG, "Got an image! "+documentUri.toString());
                         //Get bitmap of Uri
                         ParcelFileDescriptor parcelFileDescriptor =
                                 null;

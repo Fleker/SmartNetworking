@@ -1,7 +1,9 @@
 package org.rowanieee.smartnetworking.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -37,12 +39,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.rowanieee.smartnetworking.R;
 import org.rowanieee.smartnetworking.activities.UserInfoActivity;
+import org.rowanieee.smartnetworking.constants.Networks;
 import org.rowanieee.smartnetworking.database.PersonQueryDbHelper;
 import org.rowanieee.smartnetworking.model.SavedContact;
 import org.rowanieee.smartnetworking.utils.NetworksUtils;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -52,6 +56,7 @@ import java.util.List;
 public class ListFragment extends Fragment {
     public static final int PERMISSION_WRITE_CONTACTS = 308;
     private static final String TAG = "ListFragment";
+    private String id;
 
     private View v;
 
@@ -234,6 +239,7 @@ public class ListFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<>();
                 ArrayList<SavedContact> savedContacts =
                         new PersonQueryDbHelper(getContext()).readAll(new PersonQueryDbHelper(getContext()).getReadableDatabase());
 
@@ -243,8 +249,10 @@ public class ListFragment extends Fragment {
                         null, null, null, null);
                 if (cur.getCount() > 0) {
                     while (cur.moveToNext()) {
-                        String id = cur.getString(
+                        id = cur.getString(
                                 cur.getColumnIndex(ContactsContract.Contacts._ID));
+                        String lookup_key = cur.getString(
+                                cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
                         String name = cur.getString(
                                 cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                         //Query note
@@ -261,6 +269,19 @@ public class ListFragment extends Fragment {
                                         //Already exists
                                         savedContacts.remove(sc);
                                         //TODO Update contact
+                                        Log.d(TAG, "Update request for "+sc.getName());
+                                        /*Log.d(TAG, ContactsContract.Contacts.CONTENT_URI+"/"+id);
+                                        Log.d(TAG, ContactsContract.Contacts.getLookupUri(Long.parseLong(id), lookup_key).toString());
+                                        *//*contentProviderOperations.add(
+                                                ContentProviderOperation.newUpdate(Uri.parse(ContactsContract.Contacts.CONTENT_LOOKUP_URI+"/"+id))
+                                                    .build());*/
+                                        try {
+//                                            addContact(sc, ContentProviderOperation.newUpdate(Uri.parse(ContactsContract.Contacts.CONTENT_URI+"/"+id)));
+                                            addContact(sc, ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI), true);
+                                        } catch (JSONException e) {
+                                            Log.e(TAG,  e.getMessage()+"<<");
+                                            e.printStackTrace();
+                                        }
                                     }
                                 }
                             }
@@ -268,38 +289,134 @@ public class ListFragment extends Fragment {
                         noteCur.close();
                     }
                 }
+                cur.close();
 
                 //Now we only have new contacts left
-                ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<>();
                 for(SavedContact sc: savedContacts) {
-//                    sc.getDatabaseId()
-//                    sc.getAboutme()
-//                    sc.getPersonalStatement()
-//                    sc.getEmail()
-//                    sc.getCompany()
-//                    sc.getTitle()
-//                    sc.getConnections()
-                    //TODO Insert
-                    contentProviderOperations.add(
-                            ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
+                    Log.d(TAG, "Add request for "+sc.getName());
+/*                    contentProviderOperations.add(
+                            ContentProviderOperation.newUpdate(ContactsContract.RawContacts.CONTENT_URI)
                                 .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, sc.getName())
 //                                .withValue(ContactsContract.CommonDataKinds, null)
-                                .build());
+                                .build());*/
                     try {
-                        getContext().getContentResolver().
-                                applyBatch(ContactsContract.AUTHORITY, contentProviderOperations);
-                    } catch (RemoteException | OperationApplicationException e) {
+                        addContact(sc);
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    /*getContext().getContentResolver().
+                            applyBatch(ContactsContract.AUTHORITY, contentProviderOperations);*/
                 }
             }
         }).start();
     }
 
     public void showFab() {
-        ((FloatingActionButton) v.findViewById(R.id.fab_add)).show();
+        if(v.findViewById(R.id.fab_add) != null)
+            ((FloatingActionButton) v.findViewById(R.id.fab_add)).show();
     }
     public void hideFab() {
-        ((FloatingActionButton) v.findViewById(R.id.fab_add)).hide();
+        if(v.findViewById(R.id.fab_add) != null)
+            ((FloatingActionButton) v.findViewById(R.id.fab_add)).hide();
+    }
+
+    private void addContact(SavedContact sc) throws JSONException {
+        addContact(sc, ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI), false);
+    }
+
+    //Via http://stackoverflow.com/questions/12576185/cannot-insert-android-contacts-programmatically-into-android-device
+    private void addContact(SavedContact sc, ContentProviderOperation.Builder operation, boolean isAnUpdate) throws JSONException {
+        ArrayList<ContentProviderOperation> op_list = new ArrayList<>();
+        if(!isAnUpdate) {
+            op_list.add(operation
+                    .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                    .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+                    //.withValue(RawContacts.AGGREGATION_MODE, RawContacts.AGGREGATION_MODE_DEFAULT)
+                    .build());
+        }
+
+        // first and last names
+        if(isAnUpdate) {
+
+        } else {
+            op_list.add(operation
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, sc.getName())
+                    .build());
+        }
+
+        if(sc.getConnections().has(Networks.PHONE.getKey())) {
+            if(isAnUpdate) {
+                op_list.add(operation
+                        .withSelection(ContactsContract.Data.CONTACT_ID + " =? AND " + ContactsContract.Data.MIMETYPE + " =?",
+                                new String[] {id, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE})
+                        .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                        .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, sc.getConnections().get(Networks.PHONE.getKey()))
+                        .build());
+            } else {
+                op_list.add(operation
+                        .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                        .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                        .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, sc.getConnections().get(Networks.PHONE.getKey()))
+                        .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MAIN)
+                        .build());
+            }
+        }
+        Iterator<String> connectionKeys = sc.getConnections().keys();
+        while(connectionKeys.hasNext()) {
+            Networks thisNetwork = Networks.getNetworkFromKey(connectionKeys.next());
+            if(!thisNetwork.equals(Networks.PHONE)) {
+                String url = sc.getConnections().getString(thisNetwork.getKey());
+                if(!sc.getConnections().getString(thisNetwork.getKey()).contains(thisNetwork.getProtocol())) {
+                    url = thisNetwork.getProtocol()+url; //Add our prefix
+                }
+
+                if(isAnUpdate) {
+
+                } else {
+                    op_list.add(operation
+                            .withValueBackReference(ContactsContract.Contacts.Data.RAW_CONTACT_ID, 0)
+                            .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE)
+                            .withValue(ContactsContract.CommonDataKinds.Website.URL, url)
+                            .withValue(ContactsContract.CommonDataKinds.Website.TYPE, ContactsContract.CommonDataKinds.Website.TYPE_PROFILE)
+                            .build());
+                }
+            }
+        }
+        if(isAnUpdate) {
+
+        } else {
+            op_list.add(operation
+                    .withValueBackReference(ContactsContract.Contacts.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Email.DATA, sc.getEmail())
+                    .withValue(ContactsContract.CommonDataKinds.Email.TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK)
+                    .build());
+            op_list.add(operation
+                    .withValueBackReference(ContactsContract.Contacts.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Organization.COMPANY, sc.getCompany())
+                    .withValue(ContactsContract.CommonDataKinds.Organization.TITLE, sc.getTitle())
+                    .withValue(ContactsContract.CommonDataKinds.Organization.TYPE, ContactsContract.CommonDataKinds.Organization.TYPE_WORK)
+                    .build());
+            op_list.add(operation
+                    .withValueBackReference(ContactsContract.Contacts.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Website.URL, sc.getAboutme())
+                    .withValue(ContactsContract.CommonDataKinds.Website.TYPE, ContactsContract.CommonDataKinds.Website.TYPE_HOME)
+                    .build());
+            op_list.add(operation
+                    .withValueBackReference(ContactsContract.Contacts.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Note.NOTE, sc.getPersonalStatement() + "\n<SmartNetwork>\n" + sc.getConnections().toString())
+                    .build());
+        }
+
+        try {
+            ContentProviderResult[] results = getActivity().getContentResolver().applyBatch(ContactsContract.AUTHORITY, op_list);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
