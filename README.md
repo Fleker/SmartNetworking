@@ -6,6 +6,8 @@ Networking can be difficult. When you want to trade contact information, do you 
 
 This app uses Google Nearby, allowing you to see any active users in earshot. Their profiles will show up on the main screen. When you tap on their photo, all of their contact information is saved. You're able to get their name, email address, company, plus plenty of other optional metadata such as IEEE Collabratech, Facebook, GitHub, and more. Not only do these contacts get shared to your app, but they get synced to your system contacts, making it easy to maintain your contacts.
 
+"Active users" mean the user has the app open at the same time as you. Users have to manually click on the contacts they want to add, and using ultrasound, only people within a few feet are visible.
+
 Do others not have the app? No problem. They can scan a QR code right below "Nearby Contacts" and get a VCard with your contact information.
 
 Either way, you get a great way to simply get your name out there. It's time to start networking.
