@@ -208,14 +208,14 @@ public class MainActivity extends AppCompatActivity
     // Subscribe to receive messages.
     private void subscribe() {
         Log.i(TAG, "Subscribing.");
-        /*SubscribeOptions so = new SubscribeOptions.Builder()
+        SubscribeOptions so = new SubscribeOptions.Builder()
                 .setFilter(MessageFilter.INCLUDE_ALL_MY_TYPES)
                 .setStrategy(new Strategy.Builder()
                         .setTtlSeconds(Strategy.TTL_SECONDS_INFINITE)
-                        .setDistanceType(Strategy.DISTANCE_TYPE_DEFAULT) //Only very close people
+                        .setDistanceType(Strategy.DISTANCE_TYPE_EARSHOT) //Only very close people
                         .build())
-                .build();*/
-        Nearby.Messages.subscribe(gapi, mMessageListener);
+                .build();
+        Nearby.Messages.subscribe(gapi, mMessageListener, so);
     }
     private void unsubscribe() {
         Log.i(TAG, "Unsubscribing.");

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SmartNetworking</string>
+    <string name="app_name">Verbinden</string>
     <string name="NEARBY_API_KEY" translatable="false">AIzaSyBV6U5lAhr8H5a49I_vcw4wSCf2_Kmnnfo</string>
 
     <string name="qrlink" translatable="false">QRLINK</string>
