@@ -1,5 +1,5 @@
 # Verbinden
-## Make networking easy
+## Make better connections
 <img src='https://raw.githubusercontent.com/Fleker/SmartNetworking/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png?token=ADI58xAHC1KfH2r4RawlVoFWspvxR6aZks5XVmeMwA%3D%3D'>
 
 Networking can be difficult. When you want to trade contact information, do you give them an easy-to-lose business card? Try spelling out your email address? Or you can use Verbinden. 
@@ -13,3 +13,5 @@ Do others not have the app? No problem. They can scan a QR code right below "Nea
 Either way, you get a great way to simply get your name out there. It's time to start networking.
 
 This app is available on Google Play: https://play.google.com/store/apps/details?id=org.rowanieee.smartnetworking
+
+<a href='https://www.youtube.com/watch?v=dhZped3rXR4&feature=youtu.be'>Video Trailer</a>
