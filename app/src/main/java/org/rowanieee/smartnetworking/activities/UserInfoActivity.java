@@ -151,7 +151,6 @@ public class UserInfoActivity extends AppCompatActivity {
                 profile.setEmail(s.toString());
             }
         });
-        //TODO Profile pictures
         NetworksUtils.initializeNetworkFieldsForUser(profile, (LinearLayout) findViewById(R.id.contact_container), UserInfoActivity.this);
 
         final int[] editableFields = new int[] {

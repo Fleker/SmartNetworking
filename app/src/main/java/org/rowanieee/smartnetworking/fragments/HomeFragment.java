@@ -1,5 +1,6 @@
 package org.rowanieee.smartnetworking.fragments;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Icon;
 import android.os.Build;
@@ -11,6 +12,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,10 +33,13 @@ import net.glxn.qrgen.core.scheme.VCard;
 
 import org.json.JSONException;
 import org.rowanieee.smartnetworking.R;
+import org.rowanieee.smartnetworking.adapters.NearbyContactsAdapter;
 import org.rowanieee.smartnetworking.constants.Networks;
 import org.rowanieee.smartnetworking.model.SavedContact;
 import org.rowanieee.smartnetworking.utils.ImagePickerUtils;
 import org.rowanieee.smartnetworking.utils.NetworksUtils;
+
+import java.util.List;
 
 /**
  * Will show nearby connections and allow you to change your own settings
@@ -46,9 +51,15 @@ public class HomeFragment extends Fragment {
     private SettingsManager sm;
     private View v;
     private SavedContact me;
+    private NearbyContactsAdapter.NearbyContactListener listener;
+    private RecyclerView nearbyContactsRecyclerView;
 
     public HomeFragment() {
         // Required empty public constructor
+    }
+    @SuppressLint("ValidFragment")
+    public HomeFragment(NearbyContactsAdapter.NearbyContactListener listener) {
+        this.listener = listener;
     }
 
     boolean handlerActive = true;
@@ -232,7 +243,6 @@ public class HomeFragment extends Fragment {
         Bitmap myBitmap = QRCode.from(qrurl).bitmap();
         ImageView myImage = (ImageView) v.findViewById(R.id.qrcode);
         myImage.setImageBitmap(myBitmap);
-        //TODO Export contacts as VCards maybe
         VCard vCard = new VCard(me.getName())
                 .setCompany(me.getCompany())
                 .setTitle(me.getTitle())
@@ -253,9 +263,19 @@ public class HomeFragment extends Fragment {
         myImage.setImageBitmap(myBitmap);
     }
     public void updateImage(String profilePhoto) {
+        if(me == null) {
+            me = SavedContact.getMyself(getContext());
+        }
         me.setPhotoBase64(profilePhoto);
         ((ImageView) v.findViewById(R.id.me_image)).setImageBitmap(ImagePickerUtils.getBitmapFromBase64(profilePhoto));
         sm.setString(R.string.sm_contactinfo, me.toJSON().toString());
+    }
+
+    public void updateNearby(List<SavedContact> nearbyContacts) {
+        if(nearbyContactsRecyclerView == null)
+            nearbyContactsRecyclerView = (RecyclerView) v.findViewById(R.id.my_recycler_view);
+        nearbyContactsRecyclerView.setAdapter(new NearbyContactsAdapter(getContext(), nearbyContacts, listener));
+        nearbyContactsRecyclerView.setLayoutManager(NearbyContactsAdapter.getLayoutManager(getContext()));
     }
 
     @Override

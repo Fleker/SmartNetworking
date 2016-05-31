@@ -38,6 +38,7 @@ import net.glxn.qrgen.android.QRCode;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.rowanieee.smartnetworking.R;
+import org.rowanieee.smartnetworking.adapters.NearbyContactsAdapter;
 import org.rowanieee.smartnetworking.adapters.ViewPagerAdapter;
 import org.rowanieee.smartnetworking.database.PersonQueryDbHelper;
 import org.rowanieee.smartnetworking.fragments.HomeFragment;
@@ -46,6 +47,7 @@ import org.rowanieee.smartnetworking.model.SavedContact;
 import org.rowanieee.smartnetworking.utils.ImagePickerUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
     implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -63,6 +65,8 @@ public class MainActivity extends AppCompatActivity
     private HomeFragment homeFragment;
     private ListFragment listFragment;
 
+    private List<SavedContact> nearbyContacts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,12 +76,19 @@ public class MainActivity extends AppCompatActivity
                 .addConnectionCallbacks(this)
                 .enableAutoManage(this, this)
                 .build();
+        nearbyContacts = new ArrayList<>();
         mMessageListener = new MessageListener() {
             @Override
             public void onFound(Message message) {
                 String messageAsString = new String(message.getContent());
                 Log.d(TAG, "Found message: " + messageAsString);
-                //TODO @(Seamus) Display in contact view
+                try {
+                    SavedContact foundContact = new SavedContact(new JSONObject(messageAsString));
+                    nearbyContacts.add(foundContact);
+                    homeFragment.updateNearby(nearbyContacts);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 //When contact is clicked, then we insert into a database
             }
 
@@ -85,6 +96,13 @@ public class MainActivity extends AppCompatActivity
             public void onLost(Message message) {
                 String messageAsString = new String(message.getContent());
                 Log.d(TAG, "Lost sight of message: " + messageAsString);
+                try {
+                    SavedContact foundContact = new SavedContact(new JSONObject(messageAsString));
+                    nearbyContacts.remove(foundContact);
+                    homeFragment.updateNearby(nearbyContacts);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         };
 
@@ -93,7 +111,23 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        homeFragment = new HomeFragment();
+        homeFragment = new HomeFragment(new NearbyContactsAdapter.NearbyContactListener() {
+            @Override
+            public void onContactClicked(SavedContact addedContact) {
+                //Make sure contact hasn't been added before
+                PersonQueryDbHelper dbHelper = new PersonQueryDbHelper(MainActivity.this);
+                boolean shouldAdd = true;
+                for(SavedContact sc: dbHelper.readAll(dbHelper.getReadableDatabase())) {
+                    shouldAdd = shouldAdd && !sc.getEmail().equals(addedContact.getEmail());
+                }
+                if(shouldAdd) {
+                    listFragment.addNewContact(addedContact);
+                    Toast.makeText(MainActivity.this, "Saved " + addedContact.getName(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Contact is already added", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         listFragment = new ListFragment();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -174,14 +208,14 @@ public class MainActivity extends AppCompatActivity
     // Subscribe to receive messages.
     private void subscribe() {
         Log.i(TAG, "Subscribing.");
-        SubscribeOptions so = new SubscribeOptions.Builder()
+        /*SubscribeOptions so = new SubscribeOptions.Builder()
                 .setFilter(MessageFilter.INCLUDE_ALL_MY_TYPES)
                 .setStrategy(new Strategy.Builder()
                         .setTtlSeconds(Strategy.TTL_SECONDS_INFINITE)
-                        .setDistanceType(Strategy.DISTANCE_TYPE_EARSHOT) //Only very close people
+                        .setDistanceType(Strategy.DISTANCE_TYPE_DEFAULT) //Only very close people
                         .build())
-                .build();
-        Nearby.Messages.subscribe(gapi, mMessageListener, so);
+                .build();*/
+        Nearby.Messages.subscribe(gapi, mMessageListener);
     }
     private void unsubscribe() {
         Log.i(TAG, "Unsubscribing.");

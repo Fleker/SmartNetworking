@@ -20,6 +20,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -40,6 +42,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.rowanieee.smartnetworking.R;
 import org.rowanieee.smartnetworking.activities.UserInfoActivity;
+import org.rowanieee.smartnetworking.adapters.CurrentContactsAdapter;
 import org.rowanieee.smartnetworking.constants.Networks;
 import org.rowanieee.smartnetworking.database.PersonQueryDbHelper;
 import org.rowanieee.smartnetworking.model.SavedContact;
@@ -61,7 +64,7 @@ public class ListFragment extends Fragment {
     public static final int PERMISSION_WRITE_CONTACTS = 308;
     private static final String TAG = "ListFragment";
     private String id;
-
+    private RecyclerView currentContacts;
     private View v;
 
     public ListFragment() {
@@ -78,6 +81,7 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_list, container, false);
+        currentContacts = (RecyclerView) v.findViewById(R.id.previous_contacts);
         v.findViewById(R.id.fab_add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,7 +186,6 @@ public class ListFragment extends Fragment {
                         newContact.setEmail(s.toString());
                     }
                 });
-                //TODO Profile pictures
 
             }
         });
@@ -195,11 +198,26 @@ public class ListFragment extends Fragment {
         redrawContacts();
     }
 
-    /* TODO @(Seamus) Replace this function with an appropriate RecyclerView */
     public void redrawContacts() {
         PersonQueryDbHelper pqdh = new PersonQueryDbHelper(getContext());
         ArrayList<SavedContact> contacts = pqdh.readAll(pqdh.getReadableDatabase());
-        String printable = "";
+        currentContacts.setLayoutManager(new LinearLayoutManager(getContext()));
+        currentContacts.setAdapter(new CurrentContactsAdapter(getContext(), contacts, new CurrentContactsAdapter.CurrentContactsListener() {
+            @Override
+            public void onContactClicked(SavedContact savedContact) {
+                Intent userInfo = new Intent(getContext(), UserInfoActivity.class);
+                userInfo.putExtra(UserInfoActivity.EXTRA_PERSON_ID, savedContact.getDatabaseId());
+                startActivity(userInfo);
+            }
+
+            @Override
+            public void onActionClicked(String uri) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(uri));
+                startActivity(i);
+            }
+        }));
+/*        String printable = "";
         for(SavedContact contact: contacts) {
             printable += contact.getName()+" "+contact.getEmail()+"\n"+contact.getAboutme()+"\n"+contact.getConnections()+"\n\n\n";
         }
@@ -211,7 +229,7 @@ public class ListFragment extends Fragment {
                 visitUser.putExtra(UserInfoActivity.EXTRA_PERSON_ID, 1);
                 startActivity(visitUser);
             }
-        });
+        });*/
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (((AppCompatActivity) getActivity()).checkSelfPermission(Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
@@ -237,7 +255,6 @@ public class ListFragment extends Fragment {
     }
 
     public void resyncContacts() {
-        //TODO Actually write to contacts DB
         //Run in a separate thread so that we don't query forever on UI thread
         new Thread(new Runnable() {
             @Override
@@ -271,7 +288,7 @@ public class ListFragment extends Fragment {
                                     if(sc.getName().equals(name)) {
                                         //Already exists
                                         savedContacts.remove(sc);
-                                        //TODO Update contact
+                                        //Update contact
                                         Log.d(TAG, "Update request for "+sc.getName());
                                         /*Log.d(TAG, ContactsContract.Contacts.CONTENT_URI+"/"+id);
                                         Log.d(TAG, ContactsContract.Contacts.getLookupUri(Long.parseLong(id), lookup_key).toString());
@@ -321,6 +338,12 @@ public class ListFragment extends Fragment {
     public void hideFab() {
         if(v != null && v.findViewById(R.id.fab_add) != null)
             ((FloatingActionButton) v.findViewById(R.id.fab_add)).hide();
+    }
+
+    public void addNewContact(SavedContact sc) {
+        PersonQueryDbHelper dbHelper = new PersonQueryDbHelper(getContext());
+        dbHelper.insert(dbHelper.getWritableDatabase(), sc);
+        redrawContacts();
     }
 
     private void addContact(SavedContact sc) throws JSONException {

@@ -4,10 +4,12 @@
     android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
+        android:id="@+id/previous_contacts"
         android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
     <TextView
         android:layout_width="match_parent"
         android:id="@+id/printlist"
+        android:visibility="gone"
         android:layout_height="wrap_content" />
     <android.support.design.widget.FloatingActionButton
         android:layout_width="48dp"

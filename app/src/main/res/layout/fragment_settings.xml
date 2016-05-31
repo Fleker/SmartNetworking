@@ -63,18 +63,6 @@
                         android:id="@+id/action_qr"
                         android:visibility="gone"
                         android:layout_height="wrap_content" />
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="0dp"
-                        android:layout_height="wrap_content">
-                        <EditText
-                            android:hint="Website"
-                            android:id="@+id/qrlink"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </android.support.design.widget.TextInputLayout>
                 </RelativeLayout>
                 <!--Now our profile stuff-->
                 <TextView
@@ -125,6 +113,18 @@
                     <EditText
                         android:hint="Title"
                         android:id="@+id/me_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Website"
+                        android:id="@+id/qrlink"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
