@@ -270,8 +270,10 @@ public class UserInfoActivity extends AppCompatActivity {
                             getWindow().setStatusBarColor(palette.getDarkMutedSwatch().getRgb());
                         }
                     }
-                    findViewById(R.id.profile_container).setBackgroundColor(palette.getLightMutedSwatch().getRgb());
-                    ((FloatingActionButton) findViewById(R.id.fab_edit)).setBackgroundColor(palette.getVibrantSwatch().getRgb());
+                    if(palette.getLightMutedSwatch() != null) {
+                        findViewById(R.id.profile_container).setBackgroundColor(palette.getLightMutedSwatch().getRgb());
+                    }
+//                    ((FloatingActionButton) findViewById(R.id.fab_edit)).setBackgroundColor(palette.getVibrantSwatch().getRgb());
                     //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(palette.getVibrantSwatch().getRgb()));
                 }
             });
