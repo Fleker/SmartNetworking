@@ -1,243 +1,268 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroundpaper">
+    android:orientation="vertical">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_check"
+        android:tint="@android:color/white"
+        app:layout_anchor="@+id/profile_container"
+        app:layout_anchorGravity="bottom|end" />
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:visibility="gone"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/backgroundpaper"
+        android:orientation="vertical">
 
         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="1">
+            android:visibility="gone">
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:layout_width="321dp"
-                android:layout_height="wrap_content"
-                android:weightSum="1"
-                android:visibility="gone"
-                android:gravity="top|center_horizontal"
-                android:layout_weight="0.57">
+                android:weightSum="1">
 
-                <ImageView
-                    android:layout_width="52dp"
-                    android:layout_height="70dp"
-                    android:id="@+id/imageView"
-                    android:src="@drawable/insertlogo"
-                    android:contentDescription="@string/logoplaceholder"
-                    android:layout_weight="0.14" />
+                <LinearLayout
+                    android:layout_width="321dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.57"
+                    android:gravity="top|center_horizontal"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="1">
 
-                <TextView
-                    android:layout_width="253dp"
-                    android:layout_height="66dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Contact Info"
-                    android:id="@+id/Header"
-                    android:autoText="false"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:textSize="35dp"
-                    android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="52dp"
+                        android:layout_height="70dp"
+                        android:layout_weight="0.14"
+                        android:contentDescription="@string/logoplaceholder"
+                        android:src="@drawable/insertlogo" />
+
+                    <TextView
+                        android:id="@+id/Header"
+                        android:layout_width="253dp"
+                        android:layout_height="66dp"
+                        android:autoText="false"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:text="Contact Info"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="35dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:baselineAlignBottom="false"
+                    android:src="@android:drawable/ic_menu_edit" />
 
             </LinearLayout>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton"
-                android:src="@android:drawable/ic_menu_edit"
-                android:background="#ffffff"
-                android:baselineAlignBottom="false" />
-
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/profile_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/ProfilePic"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:contextClickable="true"
+                android:src="@drawable/ic_account" />
+        </RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-24dp"
+            android:fillViewport="false"
+            android:scrollIndicators="right">
+
+            <LinearLayout
+                android:id="@+id/contact_container"
+                style="@style/AppTheme"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="16dp">
+
+                <LinearLayout style="@style/UserFieldContainer">
+
+                    <ImageView
+                        android:id="@+id/nameIcon"
+                        style="@style/UserFieldIcon"
+                        android:src="@drawable/ic_account" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="0dp">
+
+                        <EditText
+                            android:id="@+id/editName"
+                            style="@style/UserFieldText"
+                            android:hint="Name"
+                            android:inputType="textPersonName" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout style="@style/UserFieldContainer">
+
+                    <ImageView
+                        android:id="@+id/CompIcon"
+                        style="@style/UserFieldIcon"
+                        android:src="@drawable/insertlogo" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="0dp">
+
+                        <EditText
+                            android:id="@+id/editCompany"
+                            style="@style/UserFieldText"
+                            android:hint="Company" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout style="@style/UserFieldContainer">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        style="@style/UserFieldIcon"
+                        android:src="@drawable/ic_tag" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="0dp">
+
+                        <EditText
+                            android:id="@+id/editTitle"
+                            style="@style/UserFieldText"
+                            android:hint="Title" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout style="@style/UserFieldContainer">
+
+                    <ImageView
+                        android:id="@+id/emailIcon"
+                        style="@style/UserFieldIcon"
+                        android:src="@drawable/ic_email" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="0dp">
+
+                        <EditText
+                            android:id="@+id/editEmail"
+                            style="@style/UserFieldText"
+                            android:hint="E-Mail"
+                            android:inputType="textEmailAddress" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/UserFieldContainer"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/phoneIcon"
+                        style="@style/UserFieldIcon"
+                        android:src="@drawable/ic_cellphone" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="0dp">
+
+                        <EditText
+                            android:id="@+id/editPhone"
+                            style="@style/UserFieldText"
+                            android:hint="Phone"
+                            android:inputType="phone" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout style="@style/UserFieldContainer">
+
+                    <ImageView
+                        android:id="@+id/websiteIcon"
+                        style="@style/UserFieldIcon"
+                        android:src="@drawable/ic_web" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="0dp">
+
+                        <EditText
+                            android:id="@+id/editWebsite"
+                            style="@style/UserFieldText"
+                            android:hint="Website"
+                            android:inputType="textUri" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/UserFieldContainer"
+                    android:layout_marginBottom="8dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="0dp">
+
+                        <EditText
+                            android:id="@+id/editPerState"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:ems="10"
+                            android:hint="Personal Statement"
+                            android:inputType="textMultiLine"
+                            android:maxLines="6"
+                            android:textAlignment="center" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
-        android:id="@+id/profile_container"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:id="@+id/ProfilePic"
-            android:src="@drawable/ic_account"
-            android:contextClickable="true"
-            android:layout_centerHorizontal="true"/>
-    </RelativeLayout>
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_marginTop="-32dp"
-        android:layout_gravity="end"
-        android:layout_marginRight="16dp"
-        android:id="@+id/fab_edit"
-        android:tint="@android:color/white"
-        android:src="@drawable/ic_check"
-        android:layout_height="wrap_content" />
-
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView"
-        android:layout_marginTop="-24dp"
-        android:fillViewport="false"
-        android:scrollIndicators="right">
-        <LinearLayout
-            android:orientation="vertical"
-            style="@style/AppTheme"
-            android:paddingTop="16dp"
-            android:id="@+id/contact_container"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                style="@style/UserFieldContainer">
-                <ImageView
-                    android:id="@+id/nameIcon"
-                    android:src="@drawable/ic_account"
-                    style="@style/UserFieldIcon" />
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:inputType="textPersonName"
-                        android:hint="Name"
-                        style="@style/UserFieldText"
-                        android:id="@+id/editName" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/UserFieldContainer">
-                <ImageView
-                    android:id="@+id/CompIcon"
-                    android:src="@drawable/insertlogo"
-                    style="@style/UserFieldIcon"
-                     />
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        style="@style/UserFieldText"
-                        android:id="@+id/editCompany"
-                        android:hint="Company" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/UserFieldContainer" >
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:src="@drawable/ic_tag"
-                    style="@style/UserFieldIcon"/>
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        style="@style/UserFieldText"
-                        android:id="@+id/editTitle"
-                        android:hint="Title" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/UserFieldContainer">
-
-                <ImageView
-                    style="@style/UserFieldIcon"
-                    android:id="@+id/emailIcon"
-                    android:src="@drawable/ic_email" />
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:inputType="textEmailAddress"
-                        style="@style/UserFieldText"
-                        android:id="@+id/editEmail"
-                        android:hint="E-Mail" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:visibility="gone"
-                style="@style/UserFieldContainer">
-                <ImageView
-                    android:id="@+id/phoneIcon"
-                    android:src="@drawable/ic_cellphone"
-                    style="@style/UserFieldIcon"/>
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        style="@style/UserFieldText"
-                        android:inputType="phone"
-                        android:id="@+id/editPhone"
-                        android:hint="Phone" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/UserFieldContainer">
-
-                <ImageView
-                    android:id="@+id/websiteIcon"
-                    android:src="@drawable/ic_web"
-                    style="@style/UserFieldIcon" />
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        style="@style/UserFieldText"
-                        android:inputType="textUri"
-                        android:id="@+id/editWebsite"
-                        android:hint="Website" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginBottom="8dp"
-                style="@style/UserFieldContainer">
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:inputType="textMultiLine"
-                        android:ems="10"
-                        android:id="@+id/editPerState"
-                        android:hint="Personal Statement"
-                        android:textAlignment="center"
-                        android:maxLines="6" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
